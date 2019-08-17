@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<head>
+<title>js Shooter Game 2</title>
+<meta charset="utf-8" />
+</head>
+
+<style>
+canvas {
+background: url("56577e48acdd6b57a6cbb3a07547a36c.gif");
+display: block;
+margin: 0 auto;
+}
+h1 {
+color: red;
+}
+h2 {
+color: green;
+}
+</style>
+
+<body>
+<center>
+<h1> Javascript 2D Samurai Game/ Simple Game Series </h1>
+<p>INSTRUCTIONS: </p>
+<canvas id="Game" height="480px" width="490px"></canvas>
+</center>
+<br>
+</br>
+<center>
+<hr></hr>
+</center>
+
+<script>
+// @author: Christopher S Coram
+// Block Game -- Level 1
+// 8 - 15 - 2019 / 1:39 AM
+
+//////////////////////
+// SET UP VARIABLES //
+//////////////////////
+var canvas = document.getElementById("Game");
+var ctx = canvas.getContext("2d");
+
+// Main floor variables
+var main_floor_x = 0;
+var main_floor_y = 415;
+var main_floor_width = 500;
+var main_floor_height = 70;
+var main_floor_X = (canvas.width - main_floor_width)/2;
+
+// Exit object variables
+var side_door_x = 465;
+var side_door_y = 325;
+var side_door_width = 26;
+var side_door_height = 90;
+var side_door_X = (canvas.width - main_floor_width)/2;
+
+// Level object 1
+var objectPanel = new Image();
+var object_panel_x = 210;
+var object_panel_y = 355;
+var object_panel_width = 50;
+var object_panel_height = 60;
+objectPanel.src = "SpaceStation_Tileset.png";
+
+// Player image
+var player = new Image();
+var player_x = 40;
+var player_y = 340;
+var player_width = 80;
+var player_height = 80;
+player.src = "samurai1.gif";
+
+
+///////////////////////////////
+///// GAME LOOP FUNCTIONS /////
+///////////////////////////////
+
+function level_structure() {
+	// Main floor
+	ctx.beginPath();
+	ctx.rect(main_floor_x,main_floor_y,main_floor_width,main_floor_height);
+    ctx.fillStyle = "#1c1d1d";
+    ctx.fill();
+    ctx.closePath();
+
+    // Side door
+    ctx.beginPath();
+    ctx.rect(side_door_x,side_door_y,side_door_width,side_door_height);
+    ctx.fillStyle = "99FFFF";
+    ctx.fill();
+    ctx.closePath();
+
+    // Control panel
+    ctx.beginPath();
+    ctx.drawImage(objectPanel,object_panel_x,object_panel_y,object_panel_width,object_panel_height);
+    ctx.fill();
+    ctx.closePath();
+
+    // Player image
+    ctx.beginPath();
+    ctx.drawImage(player,player_x,player_y,player_width,player_height);
+    ctx.fill();
+    ctx.closePath();
+}
+
+function draw() {
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	level_structure();
+}
+
+setInterval(draw, 10);
+</script>
+</body>
+</html>
