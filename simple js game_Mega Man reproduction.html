@@ -46,7 +46,7 @@ var main_floor_x = 0;
 var main_floor_y = 415;
 var main_floor_width = 500;
 var main_floor_height = 70;
-var main_floor_X = (canvas.width - main_floor_width)/2;
+
 
 // Exit object variables
 var side_door_x = 465;
@@ -69,18 +69,107 @@ var player_x = 40;
 var player_y = 340;
 var player_width = 80;
 var player_height = 80;
+var playerX = (canvas.width - player_width)/2;
+var playerY = (canvas.height - player_height)/2;
 player.src = "samurai1.gif";
 
+// Obstacle 1
+var obstacle_one_x = 150;
+var obstacle_one_y = 345;
+var obstacle_one_width = 20;
+var obstacle_one_height = 70;
+var obstacle_one_X = (canvas.width - obstacle_one_width);
+
+// Obstacle 2
+var obstacle_two_x = 150;
+var obstacle_two_y = 275;
+var obstacle_two_width = 150;
+var obstacle_two_height = 70;
+var obstacle_two_X = (canvas.width - obstacle_two_width);
+
+// Obstacle 3
+var obstacle_three_x = 280;
+var obstacle_three_y = 210;
+var obstacle_three_width = 20;
+var obstacle_three_height = 70;
+var obstacle_three_X = (canvas.width - obstacle_three_width);
+
+// Enemy object
+var enemy_object_one_x = 30;
+var enemy_object_one_y = 120;
+var enemy_radius = 10;
+var enemy_object_one_height = 15;
+var enemy_one_main = (canvas.width - enemy_radius);
+var enemy_object_one_x_speed= 6;
+var enemy_object_one_y_speed = 3;
+
+
+// Enemy object two
+var enemy_object_two_x = 380;
+var enemy_object_two_y = 370;
+var enemy_radius_two = 10;
+var enemy_object_two_height = 15;
+var enemy_two_main_x = (canvas.width - enemy_radius_two);
+var enemy_two_main_y = (canvas.height - enemy_object_two_height);
+var enemy_object_two_x_speed = 4;
+var enemy_object_two_y_speed = 6;
+
+// Event listener variables
+var rightPressed = false;
+var leftPressed = false;
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+function keyDownHandler(e) {
+	if(e.key == "Right" || e.key == "ArrowRight") {
+		rightPressed = true;
+	}
+	if(e.key == "Left" || e.key == "ArrowLeft") {
+		leftPressed = true;
+	}
+	if(e.key == "Up" || e.key == "ArrowUp") {
+		upPressed = true;
+	}
+	if(e.key == "Down" || e.key == "ArrowDown") {
+		downPressed = true;
+	}
+}
+function keyUpHandler(e) {
+	if(e.key == "Right" || e.key == "ArrowRight") {
+		rightPressed = false;
+	}
+	if(e.key == "Left" || e.key == "ArrowLeft") {
+		leftPressed = false;
+	}
+	if(e.key == "Up" || e.key == "ArrowUp") {
+		upPressed = false;
+	}
+	if(e.key == "Down" || e.key == "ArrowDown") {
+		downPressed = false;
+	}
+}
+
+// Sets interval
+var interval = setInterval(draw, 10);
 
 ///////////////////////////////
 ///// GAME LOOP FUNCTIONS /////
 ///////////////////////////////
+
+// Event listeners for keyboard
+
 
 function level_structure() {
 	// Main floor
 	ctx.beginPath();
 	ctx.rect(main_floor_x,main_floor_y,main_floor_width,main_floor_height);
     ctx.fillStyle = "#1c1d1d";
+    ctx.fill();
+    ctx.closePath();
+
+    // Player image
+    ctx.beginPath();
+    ctx.drawImage(player,player_x,player_y,player_width,player_height);
     ctx.fill();
     ctx.closePath();
 
@@ -97,19 +186,73 @@ function level_structure() {
     ctx.fill();
     ctx.closePath();
 
-    // Player image
+    // Obstacle one
     ctx.beginPath();
-    ctx.drawImage(player,player_x,player_y,player_width,player_height);
+    ctx.rect(obstacle_one_x,obstacle_one_y,obstacle_one_width,obstacle_one_height);
+    ctx.fillStyle = "#1c1d1d";
     ctx.fill();
     ctx.closePath();
+
+    // Obstacle one
+    ctx.beginPath();
+    ctx.rect(obstacle_two_x,obstacle_two_y,obstacle_two_width,obstacle_two_height);
+    ctx.fillStyle = "#1c1d1d";
+    ctx.fill();
+    ctx.closePath();
+
+    // Obstacle three
+    ctx.beginPath();
+    ctx.rect(obstacle_three_x,obstacle_three_y,obstacle_three_width,obstacle_three_height);
+    ctx.fillStyle = "#1c1d1d";
+    ctx.fill();
+    ctx.closePath();
+
+    // Enemy object one
+    ctx.beginPath();
+    ctx.arc(enemy_object_one_x,enemy_object_one_y,enemy_radius,0,Math.PI*2);
+    ctx.fillStyle = "blue";
+    ctx.fill();
+    ctx.closePath();
+    enemy_object_one_x += enemy_object_one_x_speed;
+    if(enemy_object_one_x + enemy_object_one_x_speed > enemy_one_main) {
+    	enemy_object_one_x = -enemy_object_one_x_speed;
+    	if(enemy_object_one_x > playerX && enemy_object_one_x < playerX + player_width) {
+    		alert("GAME OVER");
+    		document.location.reload();
+    		clearInterval(interval);
+    	}
+    }
+
+    // Enemy object two
+    ctx.beginPath();
+    ctx.arc(enemy_object_two_x,enemy_object_two_y,enemy_radius_two,0,Math.PI*2);
+    ctx.fillStyle = "blue";
+    ctx.fill();
+    ctx.closePath();
+    enemy_object_two_y += enemy_object_two_y_speed;
+    if(enemy_object_two_y + enemy_object_two_y_speed > enemy_two_main_y) {
+    	enemy_object_two_y = +enemy_object_two_y_speed;
+    }
 }
 
 function draw() {
 	ctx.clearRect(0,0,canvas.width,canvas.height);
 	level_structure();
-}
 
-setInterval(draw, 10);
+    // Player movement
+	if(rightPressed) {
+		player_x += 2;
+	}
+	else if(leftPressed) {
+		player_x -= 2;
+	}
+	else if(upPressed) {
+        player_y -= 2;
+	}
+	else if(downPressed) {
+		player_y += 2;
+	}
+}
 </script>
 </body>
 </html>
