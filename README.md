@@ -1,1 +1,1 @@
-# Simple-Javascript-Samurai-Game-Demo----HTML5-Game
+# JavaScript Samurai: Engaging HTML5 Game Prototype
